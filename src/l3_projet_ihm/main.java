@@ -18,8 +18,7 @@ public class main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.out.println("chose");
-        
+        System.out.println("control main_main_21");
         Controleur c = new Controleur();
     }
     
