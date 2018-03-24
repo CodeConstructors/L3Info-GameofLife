@@ -20,43 +20,43 @@ import javax.swing.JOptionPane;
  */
 public class Frame extends JFrame{
     private Controleur controleur;
-    private JButton quit = new JButton("quit");
-    private JButton next = new JButton("next");
+    private JButton butt_quit = new JButton("Quit");
+    private JButton butt_next = new JButton("Next");
     private Box box_left;
-    private JButton clear = new JButton("clear");
-    private JButton play = new JButton("play");
+    private JButton butt_clear = new JButton("Clear");
+    private JButton butt_play = new JButton("Play");
     public void Start(){ 
         this.box_left = Box.createVerticalBox();
-        this.add(quit,BorderLayout.SOUTH);
+        this.add(butt_quit,BorderLayout.SOUTH);
         this.add(box_left,BorderLayout.WEST);
-        box_left.add(next);
+        box_left.add(butt_next);
         box_left.add(Box.createVerticalGlue());
-        box_left.add(clear);
+        box_left.add(butt_clear);
         box_left.add(Box.createVerticalGlue());
-        box_left.add(play);
-        quit.setSize(25, 30);
+        box_left.add(butt_play);
+        butt_quit.setSize(25, 30);
         
-        quit.addActionListener((ActionEvent evt) -> {    
+        butt_quit.addActionListener((ActionEvent evt) -> {    
             int reponse = JOptionPane.showConfirmDialog(null,
-                    "Exit ?", "", JOptionPane.YES_NO_OPTION);
+                    "Quit ?", "", JOptionPane.YES_NO_OPTION);
             if(reponse == JOptionPane.YES_OPTION){
                 this.dispose();
             }
         });
         
-        next.addActionListener((ActionEvent evt) -> {
+        butt_next.addActionListener((ActionEvent evt) -> {
             this.controleur.nextMove();    
         });
         
-        clear.addActionListener((ActionEvent evt) -> {
+        butt_clear.addActionListener((ActionEvent evt) -> {
             this.controleur.clear();
         });
         
-        play.addActionListener((ActionEvent evt) -> {
-            if(this.play.getText().equals("play")){
-                this.play.setText("pause");
+        butt_play.addActionListener((ActionEvent evt) -> {
+            if(this.butt_play.getText().equals("Play")){
+                this.butt_play.setText("Stop");
             } else {
-                this.play.setText("play");
+                this.butt_play.setText("Play");
             }
             this.controleur.playpause();
         });

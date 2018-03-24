@@ -101,10 +101,10 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
         for(int i =0; i< this.largeur; i++){
             for(int j = 0; j < this.hauteur; j++){
                 if(this.tab[i][j]){
-                    g.setColor(Color.blue);
-                    g.fillOval(i*(int)this.longeur_cellule, j*(int)this.hauteur_cellule, (int)this.longeur_cellule, (int)this.hauteur_cellule);
+                    g.setColor(Color.ORANGE);
+                    g.fillRect(i*(int)this.longeur_cellule, j*(int)this.hauteur_cellule, (int)this.longeur_cellule, (int)this.hauteur_cellule);
                 } else {
-                    g.setColor(Color.white);
+                    g.setColor(Color.WHITE);
                     g.fillRect(i*(int)this.longeur_cellule, j*(int)this.hauteur_cellule, (int)this.longeur_cellule, (int)this.hauteur_cellule);
                 }
             }
