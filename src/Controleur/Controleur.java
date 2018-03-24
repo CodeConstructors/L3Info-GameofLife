@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package Controleur;
 
 import Modele.Modele;
@@ -26,23 +27,25 @@ public class Controleur {
     private boolean tab [][];
     private int largeur = 70;
     private int hauteur= 70;
+    
     public Controleur(){
         this.m = new Modele();
         this.aut= new auto(this);
+        
         System.out.println(this.aut.getState());
-          tab = new boolean[largeur][hauteur];
+        
+        tab = new boolean[largeur][hauteur];
         for(int i =0; i< largeur ; i++){
             for(int j = 0; j <hauteur; j++){
                 tab[i][j] = false;
             }
-            
         }
+        
         this.m.setTab(this.tab);
         this.m.setAsphyxie(4);
         this.m.setMaxVie(3);
         this.m.setMinVie(3);
         this.m.setSolitude(1);
-        
         
         this.p = new Panel(this.tab);
         this.f = new Frame();
@@ -57,9 +60,6 @@ public class Controleur {
         f.pack();
         f.setSize(500, 500);
         f.setVisible(true);
-        
-    
-    
     }
     
     public void catchClick(Point p){
@@ -67,8 +67,6 @@ public class Controleur {
             this.tab[p.x][p.y] = !this.tab[p.x][p.y];
             this.p.setTab(this.tab);
        }
-      
-        
     }
     
     public void nextMove(){
@@ -82,22 +80,18 @@ public class Controleur {
             for(int j = 0; j <hauteur; j++){
                 tab[i][j] = false;
             }
-            
         }
-         p.setTab(this.tab);
+        p.setTab(this.tab);
     }
     
     public void playpause(){
         if(this.aut.getState() != Thread.State.TERMINATED){
-            
             this.aut.arret();
-        }else{
+        } else {
             this.aut = new auto(this);
             this.aut.start();
         }
-        
     }
-    
 }
 
 class auto extends Thread {
@@ -119,10 +113,8 @@ class auto extends Thread {
          this.controleur = c;
          this.setDaemon(true);
     }
+    
     public void arret(){
         go = false;
     }
-
-    
-
 }

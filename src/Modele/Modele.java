@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package Modele;
 
 import java.awt.Point;
@@ -24,19 +25,13 @@ public class Modele {
     private static final int direction[][] = {{-1,-1},{0,-1},{1,-1},{1,0},{1,1},{0,1},{-1,1},{-1,0}};
     public Modele(){
         
-        
-        
-        
-        
     }    
     
     public boolean[][] nextMove(){
         boolean local_tab[][] = new boolean[this.tab.length][this.tab[0].length];
         
         for(int i = 0; i< this.largeur; i++){
-           
             for(int j = 0; j < this.hauteur; j++){
-                
                 int nbVoisins = 0;
                 
                 for(int n = 0; n<8;n++){
@@ -47,34 +42,25 @@ public class Modele {
                         nbVoisins += tab[x][y]?1:0;
                 }
                 
-                
-               
                 if(nbVoisins <=solitude || nbVoisins >= asphyxie){
                     local_tab[i][j] = false;
-                    
-                }else{
+                } else {
                     if(nbVoisins >= this.minVie && nbVoisins <= this.maxVie){
                         local_tab[i][j] = true;
-                    }else{
+                    } else {
                         local_tab[i][j] = this.tab[i][j];
                     }
                 }
-                
-                
             }
-            
-            
-            
         }
         this.tab = local_tab;
-        
-        
         return this.tab;
     }
+    
     private boolean is_inPanel(Point p){
         return ! (p.x<0 || p.x >= this.largeur || p.y < 0 || p.y >= this.hauteur);
-        
     }
+    
     public boolean[][] getTab() {
         return tab;
     }
@@ -83,7 +69,8 @@ public class Modele {
         this.tab = tab;
         this.largeur = tab.length;
         this.hauteur = tab[0].length;
-    }  
+    }
+    
     public int getSolitude() {
         return solitude;
     }
@@ -115,5 +102,4 @@ public class Modele {
     public void setMaxVie(int maxVie) {
         this.maxVie = maxVie;
     }
-    
 }

@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package Vue;
 
 import Controleur.Controleur;
@@ -37,22 +38,17 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
             for(int j = 0; j < this.hauteur; j++){
                 tab[i][j] = true;
             }
-            
         }
-        
-         this.addMouseListener(this);
-         this.addMouseMotionListener(this);
-        
+        this.addMouseListener(this);
+        this.addMouseMotionListener(this);
     }
     
     public Panel(boolean t [][]){
-        
         super();
         this.setBorder(BorderFactory.createLineBorder(Color.yellow));
         this.setTab(t);
-        
         this.addMouseListener(this);
-         this.addMouseMotionListener(this);
+        this.addMouseMotionListener(this);
     }
     
     
@@ -71,17 +67,15 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-       
         
     }
+    
     @Override
     public void mousePressed(MouseEvent e) {
-        
         resize();
         int x = e.getX()/(int)longeur_cellule;
         int y = e.getY()/(int)hauteur_cellule;
         controleur.catchClick(new Point(x,y));
-        
     }
 
     @Override
@@ -99,30 +93,24 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
         
     }
     
-    
     @Override
     public void paintComponent(Graphics g)
     { 
-         super.paintComponent(g);
-         resize();
-         for(int i =0; i< this.largeur; i++){
-             for(int j = 0; j < this.hauteur; j++){
-                 if(this.tab[i][j]){
-                     g.setColor(Color.blue);
-                     g.fillOval(i*(int)this.longeur_cellule, j*(int)this.hauteur_cellule, (int)this.longeur_cellule, (int)this.hauteur_cellule);
-                 }else{
-                     g.setColor(Color.white);
-                     g.fillRect(i*(int)this.longeur_cellule, j*(int)this.hauteur_cellule, (int)this.longeur_cellule, (int)this.hauteur_cellule);
-                 }
-                 
-             }
-         }
-         g.setColor(Color.red);
-        
-         
-      
+        super.paintComponent(g);
+        resize();
+        for(int i =0; i< this.largeur; i++){
+            for(int j = 0; j < this.hauteur; j++){
+                if(this.tab[i][j]){
+                    g.setColor(Color.blue);
+                    g.fillOval(i*(int)this.longeur_cellule, j*(int)this.hauteur_cellule, (int)this.longeur_cellule, (int)this.hauteur_cellule);
+                } else {
+                    g.setColor(Color.white);
+                    g.fillRect(i*(int)this.longeur_cellule, j*(int)this.hauteur_cellule, (int)this.longeur_cellule, (int)this.hauteur_cellule);
+                }
+            }
+        }
+        g.setColor(Color.red);
     }
-    
     
     public void setLienControleur(Controleur c ){
         this.controleur = c;
@@ -130,14 +118,15 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
 
     @Override
     public void mouseDragged(MouseEvent e) {
-     
+        
     }
 
     private Point mousePos = new Point(0,0);
+    
     @Override
     public void mouseMoved(MouseEvent e) {
         mousePos = e.getPoint();
-         repaint();
-         
+        repaint();
     }
+    
 }
