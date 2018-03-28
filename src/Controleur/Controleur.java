@@ -10,7 +10,9 @@ import Modele.Modele;
 import Vue.Frame;
 import Vue.Panel;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.event.MouseEvent;
 
 /**
  *
@@ -18,13 +20,16 @@ import java.awt.Point;
  */
 public class Controleur {
     
-    private final Panel p;
+    private final Panel panel_principal;
+    private final Panel panel_tampon;
     private final Frame f;
     private final Modele m;
     private final auto aut;
     private boolean tab [][];
-    private int largeur = 70;
-    private int hauteur= 70;
+    private boolean tab_mini [][];
+    private int largeur = 100;
+    private int hauteur= 100;
+    private boolean actif;
     
     public Controleur(){
         this.m = new Modele();
@@ -39,37 +44,99 @@ public class Controleur {
             }
         }
         
+           tab_mini = new boolean[10][10];
+        for(int i =0; i< 10 ; i++){
+            for(int j = 0; j <10; j++){
+                tab_mini[i][j] = false;
+            }
+        }
+        
         this.m.setTab(this.tab);
         this.m.setAsphyxie(4);
         this.m.setMaxVie(3);
         this.m.setMinVie(3);
         this.m.setSolitude(1);
         
-        this.p = new Panel(this.tab);
+        this.panel_principal = new Panel(this.tab);
+        this.panel_tampon = new Panel(this.tab_mini);
         this.f = new Frame();
         
         //Etablit les liens
         this.f.setLienControlleur(this);
-        p.setLienControleur(this);
-        
-        f.add(p,BorderLayout.CENTER);
+        this.panel_principal.setLienControleur(this);
+        this.panel_tampon.setLienControleur(this);
+        this.panel_tampon.setPreferredSize(new Dimension(100,100));
+        f.add(panel_principal,BorderLayout.CENTER);
+        f.add(panel_tampon,BorderLayout.EAST);
         f.Start();
         
-        f.pack();
-        f.setSize(500, 500);
+        //f.pack();
+        f.setSize(600, 600);
+        
         f.setVisible(true);
     }
     
-    public void catchClick(Point p){
-       if(p.x < this.largeur && p.y < this.hauteur){
-            this.tab[p.x][p.y] = !this.tab[p.x][p.y];
-            this.p.setTab(this.tab);
-       }
+    public void catchClick(Point p, Panel panel){
+        
+        
+           
+        
+            if(panel == this.panel_principal){
+                //Pas encore implementer
+                if(! this.actif){
+                    if(p.x < this.largeur && p.y < this.hauteur){
+                   this.tab[p.x][p.y] = !this.tab[p.x][p.y];
+                   this.panel_principal.setTab(this.tab);
+                   }
+                }
+            }else if(panel == this.panel_tampon) {
+                   if(p.x < 10 && p.y < 10){
+                   this.tab_mini[p.x][p.y] = !this.tab_mini[p.x][p.y];
+                   this.panel_tampon.setTab(this.tab_mini);
+                   }
+            }
+            
+        }
+            
+       
+    
+    
+    public void catchClickDroit(Point p, Panel panel, int mod){
+        int onmask = MouseEvent.SHIFT_DOWN_MASK | MouseEvent.BUTTON3_DOWN_MASK;
+        int x = p.x;
+        int y = p.y;
+        if( (mod & onmask) == onmask){//Clic droit + shift
+            System.out.println("Shift");
+             for(int i = 0; i<10; i++){
+                  for(int j = 0; j<10; j++){
+                      if(p.x+i < this.largeur && p.y+j < this.hauteur){
+                          this.tab[i+x][j+y] = this.tab_mini[i][j];
+                      }                        
+                  }
+            }
+             this.panel_principal.setTab(tab);
+            
+        } else{ //Juste clic droit
+            System.out.println("juste clic droit");
+            for(int i = 0; i<10; i++){
+                  for(int j = 0; j<10; j++){
+                      if(p.x+i < this.largeur && p.y+j < this.hauteur){
+                          this.tab_mini[i][j] = this.tab[i+x][j+y];
+                      }else{
+                          this.tab_mini[i][j] = false;
+                      }
+                        
+                  }
+            }
+            this.panel_tampon.setTab(tab_mini);
+            
+        }
+        
     }
     
     public void nextMove(){
         this.tab = m.nextMove();
-        p.setTab(this.tab);
+        panel_principal.setTab(this.tab);
         
     }
     
@@ -80,7 +147,7 @@ public class Controleur {
                 tab[i][j] = false;
             }
         }
-        p.setTab(this.tab);
+        panel_principal.setTab(this.tab);
     }
     
     public synchronized void  playpause(){
@@ -98,7 +165,13 @@ public class Controleur {
                 System.out.println("replay");
             }
         }
+        this.change_etat();
         
+    }
+    
+    private void change_etat(){
+        this.actif = ! this.actif;
+        this.panel_principal.setActif(this.actif);
     }
 }
 

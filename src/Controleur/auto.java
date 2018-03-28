@@ -26,7 +26,7 @@ class auto extends Thread {
                      }else{
                             try {
                            this.controleur.nextMove();
-                           Thread.sleep(1000);
+                           Thread.sleep(300);
                        } catch (InterruptedException ex) {
                            System.out.println("catch play");
                            Logger.getLogger(auto.class.getName()).log(Level.SEVERE, null, ex);
@@ -34,7 +34,7 @@ class auto extends Thread {
                      }
                     
                  }
-                 System.out.println("test");
+                
                      
              }
     }

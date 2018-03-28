@@ -7,9 +7,12 @@
 package Vue;
 
 import Controleur.Controleur;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -28,6 +31,8 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
     private Controleur controleur;
     private float longeur_cellule;
     private float hauteur_cellule;
+    private boolean actif = false;
+    private boolean taille_relative = false;
     public Panel(){
         super();
         this.setBorder(BorderFactory.createLineBorder(Color.yellow));
@@ -61,8 +66,16 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
     }
     
     private void resize(){
-        this.longeur_cellule = this.getWidth()/this.largeur;
-        this.hauteur_cellule = this.getHeight()/this.hauteur;
+        if(this.taille_relative){
+            this.longeur_cellule = this.getWidth()/this.largeur;
+            this.hauteur_cellule = this.getHeight()/this.hauteur;
+        }else{
+            this.longeur_cellule = 10;
+            this.hauteur_cellule = 10;
+            this.setSize(10*this.largeur, 10*this.hauteur);
+        }
+        
+        
     }
 
     @Override
@@ -75,7 +88,14 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
         resize();
         int x = e.getX()/(int)longeur_cellule;
         int y = e.getY()/(int)hauteur_cellule;
-        controleur.catchClick(new Point(x,y));
+        if( e.getButton() == MouseEvent.BUTTON1) {
+           controleur.catchClick(new Point(x,y), this);
+        }else if( e.getButton() == MouseEvent.BUTTON3) {
+            controleur.catchClickDroit(new Point(x,y), this, e.getModifiersEx());
+           
+        
+        }
+       
     }
 
     @Override
@@ -98,7 +118,8 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
     { 
         super.paintComponent(g);
         resize();
-        
+        Graphics2D g2 = (Graphics2D)g;
+        Stroke taille_trait = g2.getStroke();
         //Double boucle pour dessinner les cellules, i-> largeur, j-> hauteur 
         for(int i =0; i< this.largeur; i++){
             
@@ -110,11 +131,23 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
                     g.setColor(Color.WHITE);
                     g.fillRect(i*(int)this.longeur_cellule, j*(int)this.hauteur_cellule, (int)this.longeur_cellule, (int)this.hauteur_cellule);
                 }
-               // g.setColor(Color.black);
-                //g.drawLine(0 , j*(int)hauteur_cellule, largeur*(int)this.longeur_cellule, j*(int)this.hauteur_cellule);
+                //Si la simulation est active, on n'affiche pas la grille
+                if(!actif){
+                    g2.setStroke(new BasicStroke(0.2f));
+                    g.setColor(Color.lightGray);
+                
+                    g.drawLine(0 , j*(int)hauteur_cellule, largeur*(int)this.longeur_cellule, j*(int)this.hauteur_cellule);
+                    g2.setStroke(taille_trait);  
+                }
+                
             }
-            //g.setColor(Color.black);
-            //g.drawLine(i*(int)this.longeur_cellule, 0, i*(int)this.longeur_cellule, this.hauteur*(int)this.hauteur_cellule);
+            //Si la simulation est active, on n'affiche pas la grille
+            if(!actif){
+                g2.setStroke(new BasicStroke(0.2f));
+                g.setColor(Color.lightGray);
+                g.drawLine(i*(int)this.longeur_cellule, 0, i*(int)this.longeur_cellule, this.hauteur*(int)this.hauteur_cellule);
+                g2.setStroke(taille_trait);
+            }
         }
         g.setColor(Color.red);
     }
@@ -129,7 +162,6 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
     }
     //non utiliser actuellement
     private Point mousePos = new Point(0,0);
-    
     @Override
     public void mouseMoved(MouseEvent e) {
         mousePos = e.getPoint();
@@ -137,4 +169,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
        // System.out.println(e.getPoint());
     }
     
+    public void setActif(boolean a){
+        this.actif = a;
+    }
 }
