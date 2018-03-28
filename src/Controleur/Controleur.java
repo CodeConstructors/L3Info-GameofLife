@@ -11,8 +11,6 @@ import Vue.Frame;
 import Vue.Panel;
 import java.awt.BorderLayout;
 import java.awt.Point;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -20,10 +18,10 @@ import java.util.logging.Logger;
  */
 public class Controleur {
     
-    private Panel p;
-    private Frame f;
-    private Modele m;
-    private auto aut;
+    private final Panel p;
+    private final Frame f;
+    private final Modele m;
+    private final auto aut;
     private boolean tab [][];
     private int largeur = 70;
     private int hauteur= 70;
@@ -76,6 +74,7 @@ public class Controleur {
     }
     
     public void clear(){
+        //Retire toute les cellules du tableau
         for(int i =0; i< largeur ; i++){
             for(int j = 0; j <hauteur; j++){
                 tab[i][j] = false;
@@ -84,37 +83,22 @@ public class Controleur {
         p.setTab(this.tab);
     }
     
-    public void playpause(){
-        if(this.aut.getState() != Thread.State.TERMINATED){
-            this.aut.arret();
-        } else {
-            this.aut = new auto(this);
+    public synchronized void  playpause(){
+        //Si le thread n'a pas ete lance, le demare
+        if(this.aut.getState() == Thread.State.NEW){
             this.aut.start();
+        }else{
+            //Met le thread en pause, si il y est deja, le relance
+            if(this.aut.getState() != Thread.State.WAITING){
+                this.aut.arret();
+                System.out.println("pause");
+            } else {
+                this.aut.play();
+                
+                System.out.println("replay");
+            }
         }
+        
     }
 }
 
-class auto extends Thread {
-    private Controleur controleur;
-    private boolean go = true;
-    public void run(){
-        go = true;
-        while(go){
-            try {
-                this.controleur.nextMove();
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(auto.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } 
-    }
-    
-    public auto(Controleur c){
-         this.controleur = c;
-         this.setDaemon(true);
-    }
-    
-    public void arret(){
-        go = false;
-    }
-}

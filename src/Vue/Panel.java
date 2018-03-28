@@ -98,16 +98,23 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
     { 
         super.paintComponent(g);
         resize();
+        
+        //Double boucle pour dessinner les cellules, i-> largeur, j-> hauteur 
         for(int i =0; i< this.largeur; i++){
+            
             for(int j = 0; j < this.hauteur; j++){
                 if(this.tab[i][j]){
                     g.setColor(Color.ORANGE);
-                    g.fillRect(i*(int)this.longeur_cellule, j*(int)this.hauteur_cellule, (int)this.longeur_cellule, (int)this.hauteur_cellule);
+                    g.fillOval(i*(int)this.longeur_cellule, j*(int)this.hauteur_cellule, (int)this.longeur_cellule, (int)this.hauteur_cellule);
                 } else {
                     g.setColor(Color.WHITE);
                     g.fillRect(i*(int)this.longeur_cellule, j*(int)this.hauteur_cellule, (int)this.longeur_cellule, (int)this.hauteur_cellule);
                 }
+               // g.setColor(Color.black);
+                //g.drawLine(0 , j*(int)hauteur_cellule, largeur*(int)this.longeur_cellule, j*(int)this.hauteur_cellule);
             }
+            //g.setColor(Color.black);
+            //g.drawLine(i*(int)this.longeur_cellule, 0, i*(int)this.longeur_cellule, this.hauteur*(int)this.hauteur_cellule);
         }
         g.setColor(Color.red);
     }
@@ -120,13 +127,14 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
     public void mouseDragged(MouseEvent e) {
         
     }
-
+    //non utiliser actuellement
     private Point mousePos = new Point(0,0);
     
     @Override
     public void mouseMoved(MouseEvent e) {
         mousePos = e.getPoint();
         repaint();
+       // System.out.println(e.getPoint());
     }
     
 }
