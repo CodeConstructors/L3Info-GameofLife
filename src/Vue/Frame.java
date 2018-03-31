@@ -16,7 +16,6 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.text.MaskFormatter;
 
 /**
  *
@@ -40,10 +39,14 @@ public class Frame extends JFrame{
     private JFormattedTextField tf_tableheight = new JFormattedTextField("100");
     private JButton butt_oksize = new JButton("OK");
     
+    
+    private Panel panelPrincipal;
+    private Panel panelSecondaire;
     public void Start(){
          
         this.add(vbox_eastPanel,BorderLayout.EAST);
         vbox_eastPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        vbox_eastPanel.add(this.panelSecondaire);
         vbox_eastPanel.add(Box.createVerticalGlue());
         vbox_eastPanel.add(butt_quit);
         
@@ -64,6 +67,7 @@ public class Frame extends JFrame{
         vbox_westPanel.add(butt_oksize);
         vbox_westPanel.add(butt_play);
         
+        this.add(this.panelPrincipal, BorderLayout.CENTER);
         butt_quit.setSize(25, 30);
         
         butt_quit.addActionListener((ActionEvent evt) -> {    
@@ -95,6 +99,13 @@ public class Frame extends JFrame{
     }
     public void setLienControlleur(Controleur c){
         this.controleur = c;
+    }
+    
+    public void setPanelPrincipal(Panel p){
+        this.panelPrincipal = p;
+    }
+     public void setPanelSecondaire(Panel p ){
+        this.panelSecondaire = p;
     }
 
 }

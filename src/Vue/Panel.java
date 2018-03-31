@@ -33,6 +33,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
     private float hauteur_cellule;
     private boolean actif = false;
     private boolean taille_relative = false;
+    private int nbPixel = 10;
     public Panel(){
         super();
         this.setBorder(BorderFactory.createLineBorder(Color.yellow));
@@ -70,10 +71,11 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
             this.longeur_cellule = this.getWidth()/this.largeur;
             this.hauteur_cellule = this.getHeight()/this.hauteur;
         }else{
-            this.longeur_cellule = 10;
-            this.hauteur_cellule = 10;
-            this.setSize(10*this.largeur, 10*this.hauteur);
+            this.longeur_cellule = this.nbPixel;
+            this.hauteur_cellule = this.nbPixel;
+            this.setSize(this.nbPixel*this.largeur, this.nbPixel*this.hauteur);
         }
+        
         
         
     }
@@ -131,6 +133,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
                     g.setColor(Color.WHITE);
                     g.fillRect(i*(int)this.longeur_cellule, j*(int)this.hauteur_cellule, (int)this.longeur_cellule, (int)this.hauteur_cellule);
                 }
+                
                 //Si la simulation est active, on n'affiche pas la grille
                 if(!actif){
                     g2.setStroke(new BasicStroke(0.2f));
@@ -140,6 +143,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
                     g2.setStroke(taille_trait);  
                 }
                 
+                
             }
             //Si la simulation est active, on n'affiche pas la grille
             if(!actif){
@@ -148,8 +152,14 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
                 g.drawLine(i*(int)this.longeur_cellule, 0, i*(int)this.longeur_cellule, this.hauteur*(int)this.hauteur_cellule);
                 g2.setStroke(taille_trait);
             }
+            
+            
+                   
+                              
         }
         g.setColor(Color.red);
+        if(!actif)g.drawRect((int)this.mousePos.getX()*(int)this.longeur_cellule, (int)this.mousePos.getY()*(int)this.hauteur_cellule, (int)this.longeur_cellule, (int)this.hauteur_cellule);
+      
     }
     
     public void setLienControleur(Controleur c ){
@@ -165,6 +175,9 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
     @Override
     public void mouseMoved(MouseEvent e) {
         mousePos = e.getPoint();
+        int x = e.getX()/(int)longeur_cellule;
+        int y = e.getY()/(int)hauteur_cellule;
+        mousePos = new Point(x,y);
         repaint();
        // System.out.println(e.getPoint());
     }

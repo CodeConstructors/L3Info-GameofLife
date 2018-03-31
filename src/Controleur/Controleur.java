@@ -27,8 +27,8 @@ public class Controleur {
     private final auto aut;
     private boolean tab [][];
     private boolean tab_mini [][];
-    private int largeur = 100;
-    private int hauteur= 100;
+    private int largeur = 60;
+    private int hauteur= 60;
     private boolean actif;
     
     public Controleur(){
@@ -44,7 +44,7 @@ public class Controleur {
             }
         }
         
-           tab_mini = new boolean[10][10];
+        tab_mini = new boolean[10][10];
         for(int i =0; i< 10 ; i++){
             for(int j = 0; j <10; j++){
                 tab_mini[i][j] = false;
@@ -66,12 +66,12 @@ public class Controleur {
         this.panel_principal.setLienControleur(this);
         this.panel_tampon.setLienControleur(this);
         this.panel_tampon.setPreferredSize(new Dimension(100,100));
-        f.add(panel_principal,BorderLayout.CENTER);
-        f.add(panel_tampon,BorderLayout.EAST);
+        f.setPanelPrincipal(panel_principal);
+        f.setPanelSecondaire(panel_tampon);
         f.Start();
         
         //f.pack();
-        f.setSize(600, 600);
+        f.setSize(900, 700);
         
         f.setVisible(true);
     }
