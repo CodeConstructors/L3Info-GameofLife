@@ -18,8 +18,15 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 /**
- *
- * @author jerem
+ * Frame est la vue principal sur laquelle tous les affichages sont placer
+ * Cette classe est caractérisée par les informations suivantes :
+ * <ul>
+ * <li>parler des boutons ici</li>
+ * 
+ * </ul>
+ * 
+ * @author benoit gougeon
+ * @version 1.0
  */
 public class Frame extends JFrame{
     private Controleur controleur;
@@ -43,6 +50,8 @@ public class Frame extends JFrame{
     private Panel panelPrincipal;
     private Panel panelSecondaire;
     public void Start(){
+         this.tf_tablewidth.setValue(this.controleur.getSize().width);
+         this.tf_tableheight.setValue(this.controleur.getSize().height);
          
         this.add(vbox_eastPanel,BorderLayout.EAST);
         vbox_eastPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -85,6 +94,9 @@ public class Frame extends JFrame{
         butt_clear.addActionListener((ActionEvent evt) -> {
             this.controleur.clear();
         });
+         butt_oksize.addActionListener((ActionEvent evt) -> {
+            this.controleur.resize(this.tf_tablewidth.getText(), this.tf_tableheight.getText());
+        });
         
         butt_play.addActionListener((ActionEvent evt) -> {
             if(this.butt_play.getText().equals("Play")){
@@ -103,6 +115,7 @@ public class Frame extends JFrame{
     
     public void setPanelPrincipal(Panel p){
         this.panelPrincipal = p;
+        
     }
      public void setPanelSecondaire(Panel p ){
         this.panelSecondaire = p;

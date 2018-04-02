@@ -9,8 +9,17 @@ package Modele;
 import java.awt.Point;
 
 /**
- *
- * @author jerem
+ * Modele est la classe qui gere les calculs sur le jeu
+ * Cette classe est caractérisée par les informations suivantes :
+ * <ul>
+ * <li>Solitude est le nombre de cellules voisine en dessous du quel la cellule deperit</li>
+ * <li>asphyxie est le nombre de cellules voisine au dessus du quel la celule deperit</li>
+ * <li>minVie est le nombre de cellule voisine necessaire à l'apparition d'une nouvelle celule</li>
+ * <li>maxVie est le nombre de cellule voisine necessaire à l'apparition d'une nouvelle celule</li>
+ * </ul>
+ * Cette classe calcul les changement du tableau dans le jeu de la vie
+ * @author jérémy rousseau
+ * @version 1.0
  */
 public class Modele {
     private int solitude;
@@ -21,12 +30,18 @@ public class Modele {
     private int largeur;
     private int hauteur;
     private boolean tab[][];
-    
+    /**Definit les 8 directions possibles pour une cellule */
     private static final int direction[][] = {{-1,-1},{0,-1},{1,-1},{1,0},{1,1},{0,1},{-1,1},{-1,0}};
     public Modele(){
         
     }    
-    
+     /**
+     * <b>Fonction jeu </b>
+     * Calcul la possition du plateau à l'intant t+1
+     * /!\ ne modifie pas le tableau du modele
+     * 
+     * @return Renvoie le tableau dans l'etat suivant à l'etat actuel
+     */
     public boolean[][] nextMove(){
         boolean local_tab[][] = new boolean[this.tab.length][this.tab[0].length];
         
@@ -53,8 +68,8 @@ public class Modele {
                 }
             }
         }
-        this.tab = local_tab;
-        return this.tab;
+        
+        return local_tab;
     }
     
     private boolean is_inPanel(Point p){
@@ -63,6 +78,29 @@ public class Modele {
     
     public boolean[][] getTab() {
         return tab;
+    }
+    
+       //Fonction qui redefini la taille du tableau sans perte de donnée
+    //Les vérifications seront effectuer dans le controleur
+    public boolean[][] resize(int larg, int haut){
+        int largeur = larg<this.largeur?larg:this.largeur;
+        int hauteur = haut<this.hauteur?haut:this.hauteur;
+        boolean tab[][] = new boolean[larg][haut];
+        
+        for(int i = 0;i <larg;i++){
+            for(int j =0; j< haut; j++){
+                //Si l'on ai dans la limite du plus petit tableau, on copie, sinon on initialise a false
+                if(i< largeur && j< hauteur){
+                  
+                    tab[i][j] = this.tab[i][j]; //On copie le contenu de l'ancien tableau dans le nouveau
+                }else{
+                    tab[i][j] = false;
+                }
+                
+            }
+        }
+        this.setTab(tab);
+        return this.tab;
     }
 
     public void setTab(boolean[][] tab) {
@@ -102,4 +140,6 @@ public class Modele {
     public void setMaxVie(int maxVie) {
         this.maxVie = maxVie;
     }
+    
+ 
 }

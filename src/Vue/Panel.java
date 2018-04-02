@@ -20,20 +20,43 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 /**
- *
- * @author jerem
+ * Panel est la vue qui affiche l'etat en cour du jeu de la vie
+ * Cette classe est caractérisée par les informations suivantes :
+ * <ul>
+ * <li>tab : Le tableau de cellules à afficher</li>
+ *  à continuer
+ * </ul>
+ * 
+ * @author jeremy rousseau
+ * @version 1.0
  */
 public class Panel extends JPanel implements MouseListener, MouseMotionListener{
     
+    //Tableau des cellules
     private boolean [][] tab;
+    //Taille du tableau :
     private int largeur;
     private int hauteur;
+    
     private Controleur controleur;
+    /**Definit si la grille est active ou non */
+    private boolean actif = false; 
+    
+    
+    //Variables de taille des cellules
+    /**longeur d'une cellule, en pixel */
     private float longeur_cellule;
+    /**Hauteur d'une cellule, en pixel */
     private float hauteur_cellule;
-    private boolean actif = false;
-    private boolean taille_relative = false;
+    /**Definit si la taille des cellules est fixe, ou si elle depend de la taille du panel*/
+    private boolean taille_relative = false; 
+    /** Nombre de pixel d'une cellule en cas de taille fixe */
     private int nbPixel = 10;
+    
+    //Variables de gestion de la position de la souris pour le carré rouge
+    private Point mousePos = new Point(0,0);
+    private boolean mouseTraquer;
+    
     public Panel(){
         super();
         this.setBorder(BorderFactory.createLineBorder(Color.yellow));
@@ -45,6 +68,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
                 tab[i][j] = true;
             }
         }
+        
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
     }
@@ -57,7 +81,16 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
         this.addMouseMotionListener(this);
     }
     
-    
+    /** 
+     *<b>Setter du tableau </b>
+     * Definit le tableau de cellule utiliser,
+     * appelle la redefinition du panel et le rapaint
+     * modifie les attributs de taille
+     * On ne verifie pas les valeurs du nouveau tableau, ce sera gerer à l'appelle
+     * 
+     * @param t
+     *      Nouveau tableau
+     */
     public void setTab(boolean t [][]){
         this.tab = t;
         this.largeur = t.length;
@@ -66,6 +99,14 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
         this.repaint();
     }
     
+    
+    /**
+     * <b> Redefinition du tableau </b>
+     * 
+     * Si les cellules sont en taille fixe change la taille du panel
+     * Si les cellules sont en taille relative change la taille des cellules
+     *
+     */
     private void resize(){
         if(this.taille_relative){
             this.longeur_cellule = this.getWidth()/this.largeur;
@@ -85,6 +126,12 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
         
     }
     
+    /**
+     * <b> Capture des cliques </b>
+     * Detecte un clique et recupere ses coordonnée dans le tableau (convertit la position relative au panel
+     * en position relative au tableau de cellule ) 
+     * Appelle la methode correspondant au bouton de la souris cliquer au controleur
+     */
     @Override
     public void mousePressed(MouseEvent e) {
         resize();
@@ -107,12 +154,15 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
 
     @Override
     public void mouseEntered(MouseEvent e) {
-    
+        //Si la souris entre dans le panel, on affiche sa posiiton
+      this.mouseTraquer = true;
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        
+        //Si la souris sort du panel, on arrete d'afficher sa posiiton
+        this.mouseTraquer = false;
+        this.repaint();
     }
     
     @Override
@@ -157,8 +207,11 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
                    
                               
         }
+        //Dessin du carré rouge pour le pointeur
+        //Uniquement si la grille n'est pas active et si le pointeur est sur le panel
         g.setColor(Color.red);
-        if(!actif)g.drawRect((int)this.mousePos.getX()*(int)this.longeur_cellule, (int)this.mousePos.getY()*(int)this.hauteur_cellule, (int)this.longeur_cellule, (int)this.hauteur_cellule);
+        if(!actif && this.mouseTraquer)
+            g.drawRect((int)this.mousePos.getX()*(int)this.longeur_cellule, (int)this.mousePos.getY()*(int)this.hauteur_cellule, (int)this.longeur_cellule, (int)this.hauteur_cellule);
       
     }
     
@@ -170,16 +223,20 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
     public void mouseDragged(MouseEvent e) {
         
     }
-    //non utiliser actuellement
-    private Point mousePos = new Point(0,0);
+    
+    
     @Override
     public void mouseMoved(MouseEvent e) {
-        mousePos = e.getPoint();
-        int x = e.getX()/(int)longeur_cellule;
-        int y = e.getY()/(int)hauteur_cellule;
-        mousePos = new Point(x,y);
-        repaint();
-       // System.out.println(e.getPoint());
+        //Enregistre la position de la souris dans le panel
+        if(mouseTraquer){
+            mousePos = e.getPoint();
+            int x = e.getX()/(int)longeur_cellule;
+            int y = e.getY()/(int)hauteur_cellule;
+            mousePos = new Point(x,y);
+            repaint();
+            // System.out.println(e.getPoint());
+        }
+     
     }
     
     public void setActif(boolean a){

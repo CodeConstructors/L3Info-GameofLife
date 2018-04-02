@@ -16,7 +16,7 @@ import java.awt.event.MouseEvent;
 
 /**
  *
- * @author jerem
+ * @author jeremy
  */
 public class Controleur {
     
@@ -27,8 +27,8 @@ public class Controleur {
     private final auto aut;
     private boolean tab [][];
     private boolean tab_mini [][];
-    private int largeur = 60;
-    private int hauteur= 60;
+    private int largeur = 20;
+    private int hauteur= 20;
     private boolean actif;
     
     public Controleur(){
@@ -136,20 +136,28 @@ public class Controleur {
     
     public void nextMove(){
         this.tab = m.nextMove();
-        panel_principal.setTab(this.tab);
+        this.panel_principal.setTab(this.tab);
+        this.m.setTab(this.tab);
         
     }
-    
+     /**
+     * <b>clear </b>
+     * Reinitialise toute les cases du tableau à false
+     */
     public void clear(){
         //Retire toute les cellules du tableau
         for(int i =0; i< largeur ; i++){
             for(int j = 0; j <hauteur; j++){
-                tab[i][j] = false;
+                this.tab[i][j] = false;
             }
         }
-        panel_principal.setTab(this.tab);
+        this.panel_principal.setTab(this.tab);
+        this.m.setTab(this.tab);
     }
-    
+    /**
+     * <b>play pause </b>
+     * Met le thread de jeu en pause, ou le remet en route
+     */
     public synchronized void  playpause(){
         //Si le thread n'a pas ete lance, le demare
         if(this.aut.getState() == Thread.State.NEW){
@@ -172,6 +180,41 @@ public class Controleur {
     private void change_etat(){
         this.actif = ! this.actif;
         this.panel_principal.setActif(this.actif);
+    }
+    
+    
+    /**
+     * <b> Redefinition taille tableau </b>
+     * 
+     * Change la taille du tableau, 
+     * verifie la validité des parametre
+     * 
+     * @param larg
+     *      Nouvelle largeur
+     * @param haut 
+     *      Nouvelle hauteur
+     */
+    
+    public void resize(String larg,String haut){
+        
+        //Convertissage des valeurs (proviennent d'une entrée utilisateur
+        int lar = Static.parseWithDefault(larg, -1); 
+        int hau = Static.parseWithDefault(haut, -1);
+        //Verification de ces valeurs, la taille maximal est pour eviter les ralentissement
+        if(lar > 0 && lar <200 && hau>0 && hau <200){
+            this.tab = this.m.resize(lar, hau);
+            this.largeur = lar;
+            this.hauteur = hau;
+            this.panel_principal.setTab(this.tab);
+        }else{
+            System.err.println("mauvais format de tableau");
+        }
+    }
+    
+   
+    
+    public Dimension getSize(){
+        return new Dimension(largeur,hauteur);
     }
 }
 
