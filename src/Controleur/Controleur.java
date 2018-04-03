@@ -7,6 +7,8 @@
 package Controleur;
 
 import Modele.Modele;
+import Modele.fichier;
+import static Modele.fichier.save;
 import Vue.Frame;
 import Vue.Panel;
 import java.awt.BorderLayout;
@@ -27,8 +29,8 @@ public class Controleur {
     private final auto aut;
     private boolean tab [][];
     private boolean tab_mini [][];
-    private int largeur = 20;
-    private int hauteur= 20;
+    private int largeur = 70;
+    private int hauteur= 70;
     private boolean actif;
     
     public Controleur(){
@@ -41,9 +43,10 @@ public class Controleur {
         for(int i =0; i< largeur ; i++){
             for(int j = 0; j <hauteur; j++){
                 tab[i][j] = false;
+                
             }
         }
-        
+        //tab[3][4] = true;
         tab_mini = new boolean[10][10];
         for(int i =0; i< 10 ; i++){
             for(int j = 0; j <10; j++){
@@ -51,6 +54,8 @@ public class Controleur {
             }
         }
         
+        
+       
         this.m.setTab(this.tab);
         this.m.setAsphyxie(4);
         this.m.setMaxVie(3);
@@ -77,10 +82,6 @@ public class Controleur {
     }
     
     public void catchClick(Point p, Panel panel){
-        
-        
-           
-        
             if(panel == this.panel_principal){
                 //Pas encore implementer
                 if(! this.actif){
@@ -106,7 +107,6 @@ public class Controleur {
         int x = p.x;
         int y = p.y;
         if( (mod & onmask) == onmask){//Clic droit + shift
-            System.out.println("Shift");
              for(int i = 0; i<10; i++){
                   for(int j = 0; j<10; j++){
                       if(p.x+i < this.largeur && p.y+j < this.hauteur){
@@ -117,7 +117,6 @@ public class Controleur {
              this.panel_principal.setTab(tab);
             
         } else{ //Juste clic droit
-            System.out.println("juste clic droit");
             for(int i = 0; i<10; i++){
                   for(int j = 0; j<10; j++){
                       if(p.x+i < this.largeur && p.y+j < this.hauteur){
@@ -162,14 +161,17 @@ public class Controleur {
         //Si le thread n'a pas ete lance, le demare
         if(this.aut.getState() == Thread.State.NEW){
             this.aut.start();
+             
+        
         }else{
             //Met le thread en pause, si il y est deja, le relance
             if(this.aut.getState() != Thread.State.WAITING){
                 this.aut.arret();
+             
                 System.out.println("pause");
             } else {
                 this.aut.play();
-                
+               
                 System.out.println("replay");
             }
         }
