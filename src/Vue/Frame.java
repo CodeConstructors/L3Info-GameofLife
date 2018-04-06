@@ -8,6 +8,7 @@ package Vue;
 
 import Controleur.Controleur;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -54,12 +55,14 @@ public class Frame extends JFrame{
          this.tf_tableheight.setValue(this.controleur.getSize().height);
          
         this.add(vbox_eastPanel,BorderLayout.EAST);
+        vbox_eastPanel.setMinimumSize(new Dimension(500, 500));
         vbox_eastPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         vbox_eastPanel.add(this.panelSecondaire);
         vbox_eastPanel.add(Box.createVerticalGlue());
         vbox_eastPanel.add(butt_quit);
         
         this.add(vbox_westPanel,BorderLayout.WEST);
+        vbox_westPanel.setMinimumSize(new Dimension(500, 500));
         vbox_westPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         vbox_westPanel.add(butt_next);
         vbox_westPanel.add(butt_clear);

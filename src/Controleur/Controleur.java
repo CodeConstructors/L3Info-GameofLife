@@ -21,18 +21,33 @@ import java.awt.event.MouseEvent;
  * @author jeremy
  */
 public class Controleur {
+    private static final int INI_LARGEUR = 70;
+    private static final int INI_HAUTEUR = 70;
     
+    private static final int INI_MINVIE = 3;
+    private static final int INI_MAXVIE = 3;
+    private static final int INI_SOLITUDE = 1;
+    private static final int INI_ASPHYXIE = 4;
+    
+    /**Le panel dans le quel se deroule le jeu */
     private final Panel panel_principal;
+    /**Le panel pour les copies */
     private final Panel panel_tampon;
+    /**L'afficheur pour les boutons */
     private final Frame f;
     private final Modele m;
     private final auto aut;
+    /**Le tableau pour les cellules du panel principal */
     private boolean tab [][];
+    /**Le tableau pour les cellules du panel secondaire */
     private boolean tab_mini [][];
-    private int largeur = 70;
-    private int hauteur= 70;
+    /**Nombre de cellules du tableau en X */
+    private int largeur = INI_LARGEUR;
+    /**Nombre de cellules du tableau en Y */
+    private int hauteur= INI_HAUTEUR;
     private boolean actif;
     
+    /**Constructeur par default du Controleur, il crée la vue et le modele et les initialise */
     public Controleur(){
         this.m = new Modele();
         this.aut= new auto(this);
@@ -57,10 +72,10 @@ public class Controleur {
         
        
         this.m.setTab(this.tab);
-        this.m.setAsphyxie(4);
-        this.m.setMaxVie(3);
-        this.m.setMinVie(3);
-        this.m.setSolitude(1);
+        this.m.setAsphyxie(INI_ASPHYXIE);
+        this.m.setMaxVie(INI_MAXVIE );
+        this.m.setMinVie(INI_MINVIE);
+        this.m.setSolitude(INI_SOLITUDE);
         
         this.panel_principal = new Panel(this.tab);
         this.panel_tampon = new Panel(this.tab_mini);
@@ -81,15 +96,22 @@ public class Controleur {
         f.setVisible(true);
     }
     
+    /**catchClick 
+    * Methode qui traite les click sur un des panel
+    * @param p : Le point sur lequel l'utilisateur a cliquer
+    * @param panel : Le panel sur lequel l'utilisateur a cliqué
+    */
     public void catchClick(Point p, Panel panel){
+            //L'action sur le panel principal interagit avec le tab
             if(panel == this.panel_principal){
-                //Pas encore implementer
+                //Le click esst sans effet quand le modele est actif
                 if(! this.actif){
                     if(p.x < this.largeur && p.y < this.hauteur){
                    this.tab[p.x][p.y] = !this.tab[p.x][p.y];
                    this.panel_principal.setTab(this.tab);
                    }
                 }
+                //L'action sur le panel secondaire interagit avec tab_mini
             }else if(panel == this.panel_tampon) {
                    if(p.x < 10 && p.y < 10){
                    this.tab_mini[p.x][p.y] = !this.tab_mini[p.x][p.y];
@@ -101,12 +123,18 @@ public class Controleur {
             
        
     
-    
+    /**CatchClickDroit
+    * Reçoit l'information lors d'un click droit
+    * @param p : Le point sur lequel l'utilisateur a cliquer
+    * @param panel : Le panel sur lequel l'utilisateur a cliqué
+    * @param mod : Le modifieur renvoyer par l'evenement mouseListener lors d'un click
+    */
     public void catchClickDroit(Point p, Panel panel, int mod){
         int onmask = MouseEvent.SHIFT_DOWN_MASK | MouseEvent.BUTTON3_DOWN_MASK;
         int x = p.x;
         int y = p.y;
         if( (mod & onmask) == onmask){//Clic droit + shift
+            //Copie dans le tableau principal le contenu du tableau secondaire
              for(int i = 0; i<10; i++){
                   for(int j = 0; j<10; j++){
                       if(p.x+i < this.largeur && p.y+j < this.hauteur){
@@ -118,6 +146,7 @@ public class Controleur {
             
         } else{ //Juste clic droit
             for(int i = 0; i<10; i++){
+                //Copie dans le tableau secondaire la zone du tableau principal
                   for(int j = 0; j<10; j++){
                       if(p.x+i < this.largeur && p.y+j < this.hauteur){
                           this.tab_mini[i][j] = this.tab[i+x][j+y];
