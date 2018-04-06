@@ -213,10 +213,30 @@ public class Controleur {
         }
     }
     
-   
+   public void save(){
+       fichier.save("test.txt", tab, "test");
+       
+   }
+   private boolean[][] tab_test;
+   public void charg(){
+       this.tab = fichier.charger("test.txt").get(0);
+       this.largeur = tab.length;
+       this.hauteur = tab[0].length;
+       this.m.setTab(this.tab);
+       this.panel_principal.setTab(this.tab);
+   }
     
     public Dimension getSize(){
         return new Dimension(largeur,hauteur);
+    }
+    /**<b> Génération des cellules aléatoires </b>
+     * 
+     */
+    private boolean[][] génération_aleatoire(int prop){
+        boolean[][] tab = new boolean[this.largeur][this.hauteur];
+        
+        
+        return tab;
     }
 }
 
