@@ -45,8 +45,8 @@ public class Frame extends JFrame{
     private JFormattedTextField tf_tablewidth = new JFormattedTextField("100");
     private JFormattedTextField tf_tableheight = new JFormattedTextField("100");
     private JButton butt_oksize = new JButton("OK");
-    
-    
+    private JButton butt_save = new JButton("save");
+    private JButton butt_charg = new JButton("charge");
     private Panel panelPrincipal;
     private Panel panelSecondaire;
     public void Start(){
@@ -76,6 +76,8 @@ public class Frame extends JFrame{
         vbox_westPanel.add(butt_oksize);
         vbox_westPanel.add(butt_play);
         
+        vbox_eastPanel.add(butt_save);
+        vbox_eastPanel.add(butt_charg);
         this.add(this.panelPrincipal, BorderLayout.CENTER);
         butt_quit.setSize(25, 30);
         
@@ -96,6 +98,12 @@ public class Frame extends JFrame{
         });
          butt_oksize.addActionListener((ActionEvent evt) -> {
             this.controleur.resize(this.tf_tablewidth.getText(), this.tf_tableheight.getText());
+        });
+          butt_save.addActionListener((ActionEvent evt) -> {
+            this.controleur.save();
+        });
+           butt_charg.addActionListener((ActionEvent evt) -> {
+            this.controleur.charg();
         });
         
         butt_play.addActionListener((ActionEvent evt) -> {
