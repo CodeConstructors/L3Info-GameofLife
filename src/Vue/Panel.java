@@ -16,6 +16,8 @@ import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
@@ -30,7 +32,7 @@ import javax.swing.JPanel;
  * @author jeremy rousseau
  * @version 1.0
  */
-public class Panel extends JPanel implements MouseListener, MouseMotionListener{
+public class Panel extends JPanel implements MouseListener, MouseMotionListener, MouseWheelListener{
     
     //Tableau des cellules
     private boolean [][] tab;
@@ -51,7 +53,9 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
     /**Definit si la taille des cellules est fixe, ou si elle depend de la taille du panel*/
     private boolean taille_relative = false; 
     /** Nombre de pixel d'une cellule en cas de taille fixe */
-    private int nbPixel = 10;
+    private int nombre_Pixel = 10;
+
+  
     
     //Variables de gestion de la position de la souris pour le carré rouge
     private Point mousePos = new Point(0,0);
@@ -68,7 +72,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
                 tab[i][j] = true;
             }
         }
-        
+        this.addMouseWheelListener(this);
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
     }
@@ -77,6 +81,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
         super();
         this.setBorder(BorderFactory.createLineBorder(Color.yellow));
         this.setTab(t);
+         this.addMouseWheelListener(this);
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
     }
@@ -112,9 +117,9 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
             this.longeur_cellule = this.getWidth()/this.largeur;
             this.hauteur_cellule = this.getHeight()/this.hauteur;
         }else{
-            this.longeur_cellule = this.nbPixel;
-            this.hauteur_cellule = this.nbPixel;
-            this.setSize(this.nbPixel*this.largeur, this.nbPixel*this.hauteur);
+            this.longeur_cellule = this.nombre_Pixel;
+            this.hauteur_cellule = this.nombre_Pixel;
+            this.setSize(this.nombre_Pixel*this.largeur, this.nombre_Pixel*this.hauteur);
         }
         
         
@@ -241,5 +246,22 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
     
     public void setActif(boolean a){
         this.actif = a;
+    }
+
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+     
+           this.controleur.zoom(-e.getWheelRotation());
+       
+    }
+    
+      public int getNombre_Pixel() {
+        return nombre_Pixel;
+    }
+
+    public void setNombre_Pixel(int nombre_Pixel) {
+        this.nombre_Pixel = nombre_Pixel;
+        this.resize();
+        this.repaint();
     }
 }

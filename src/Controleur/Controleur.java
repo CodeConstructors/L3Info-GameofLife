@@ -15,6 +15,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.util.Random;
 
 /**
  *
@@ -28,6 +29,8 @@ public class Controleur {
     private static final int INI_MAXVIE = 3;
     private static final int INI_SOLITUDE = 1;
     private static final int INI_ASPHYXIE = 4;
+    
+    private static final int INI_PIXEL = 10;
     
     /**Le panel dans le quel se deroule le jeu */
     private final Panel panel_principal;
@@ -84,6 +87,7 @@ public class Controleur {
         //Etablit les liens
         this.f.setLienControlleur(this);
         this.panel_principal.setLienControleur(this);
+        this.panel_principal.setNombre_Pixel(INI_PIXEL);
         this.panel_tampon.setLienControleur(this);
         this.panel_tampon.setPreferredSize(new Dimension(100,100));
         f.setPanelPrincipal(panel_principal);
@@ -133,31 +137,33 @@ public class Controleur {
         int onmask = MouseEvent.SHIFT_DOWN_MASK | MouseEvent.BUTTON3_DOWN_MASK;
         int x = p.x;
         int y = p.y;
-        if( (mod & onmask) == onmask){//Clic droit + shift
-            //Copie dans le tableau principal le contenu du tableau secondaire
-             for(int i = 0; i<10; i++){
-                  for(int j = 0; j<10; j++){
-                      if(p.x+i < this.largeur && p.y+j < this.hauteur){
-                          this.tab[i+x][j+y] = this.tab_mini[i][j];
-                      }                        
-                  }
-            }
-             this.panel_principal.setTab(tab);
-            
-        } else{ //Juste clic droit
-            for(int i = 0; i<10; i++){
-                //Copie dans le tableau secondaire la zone du tableau principal
-                  for(int j = 0; j<10; j++){
-                      if(p.x+i < this.largeur && p.y+j < this.hauteur){
-                          this.tab_mini[i][j] = this.tab[i+x][j+y];
-                      }else{
-                          this.tab_mini[i][j] = false;
+        if(! this.actif){
+            if( (mod & onmask) == onmask){//Clic droit + shift
+                //Copie dans le tableau principal le contenu du tableau secondaire
+                 for(int i = 0; i<10; i++){
+                      for(int j = 0; j<10; j++){
+                          if(p.x+i < this.largeur && p.y+j < this.hauteur){
+                              this.tab[i+x][j+y] = this.tab_mini[i][j];
+                          }                        
                       }
-                        
-                  }
+                }
+                 this.panel_principal.setTab(tab);
+
+            } else{ //Juste clic droit
+                for(int i = 0; i<10; i++){
+                    //Copie dans le tableau secondaire la zone du tableau principal
+                      for(int j = 0; j<10; j++){
+                          if(p.x+i < this.largeur && p.y+j < this.hauteur){
+                              this.tab_mini[i][j] = this.tab[i+x][j+y];
+                          }else{
+                              this.tab_mini[i][j] = false;
+                          }
+
+                      }
+                }
+                this.panel_tampon.setTab(tab_mini);
+
             }
-            this.panel_tampon.setTab(tab_mini);
-            
         }
         
     }
@@ -232,14 +238,19 @@ public class Controleur {
         int lar = Static.parseWithDefault(larg, -1); 
         int hau = Static.parseWithDefault(haut, -1);
         //Verification de ces valeurs, la taille maximal est pour eviter les ralentissement
-        if(lar > 0 && lar <200 && hau>0 && hau <200){
-            this.tab = this.m.resize(lar, hau);
-            this.largeur = lar;
-            this.hauteur = hau;
-            this.panel_principal.setTab(this.tab);
+        if(!this.actif){
+            if(lar > 0 && lar <200 && hau>0 && hau <200){
+                this.tab = this.m.resize(lar, hau);
+                this.largeur = lar;
+                this.hauteur = hau;
+                this.panel_principal.setTab(this.tab);
+            }else{
+                System.err.println("mauvais format de tableau");
+            }
         }else{
-            System.err.println("mauvais format de tableau");
+            this.f.redef_taille(this.hauteur, this.largeur);
         }
+        
     }
     
    public void save(){
@@ -248,24 +259,60 @@ public class Controleur {
    }
    private boolean[][] tab_test;
    public void charg(){
-       this.tab = fichier.charger("test.txt").get(0);
-       this.largeur = tab.length;
-       this.hauteur = tab[0].length;
-       this.m.setTab(this.tab);
-       this.panel_principal.setTab(this.tab);
+       
+       this.setTab(fichier.charger("test.txt").get(0));
    }
     
     public Dimension getSize(){
         return new Dimension(largeur,hauteur);
     }
     /**<b> Génération des cellules aléatoires </b>
-     * 
+     * Crée un tableau remplit de cellule placé aléatoirement
+     * La taille du tableau est basé sur celle du panel actif
+     * @param prop : proportion (en pourcent) de cellules vivantes
+     * @return : Tableau générer.
      */
     private boolean[][] génération_aleatoire(int prop){
         boolean[][] tab = new boolean[this.largeur][this.hauteur];
+        Random r = new java.util.Random();
         
-        
+        double v = 0;
+        for(int i =0; i< largeur ; i++){
+            for(int j = 0; j <hauteur; j++){
+                v = Math.random()*100;
+                
+                tab[i][j] =( (v< prop || prop == 100 ) && prop != 0);
+                System.out.println(tab[i][j]);
+            }
+        }
+        System.out.println(prop);
         return tab;
     }
+    
+    public void random(int p){
+        if(actif){
+            this.playpause();
+            this.f.playPause_boutton();
+        }
+        if(p<=100 && p>= 0){
+            this.setTab(this.génération_aleatoire(p));
+        }
+        
+    }
+    
+    private void setTab(boolean[][] tab){
+       this.tab = tab;
+       this.largeur = tab.length;
+       this.hauteur = tab[0].length;
+       this.m.setTab(tab);
+       this.panel_principal.setTab(tab);
+       
+    }
+    
+    public void zoom(int n){
+        this.panel_principal.setNombre_Pixel(this.panel_principal.getNombre_Pixel() + n);
+    }
+    
+    
 }
 
