@@ -9,12 +9,15 @@ package Controleur;
 import Modele.Modele;
 import Modele.fichier;
 import static Modele.fichier.save;
+import Modele.patern;
 import Vue.Frame;
 import Vue.Panel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -29,7 +32,8 @@ public class Controleur {
     private static final int INI_MAXVIE = 3;
     private static final int INI_SOLITUDE = 1;
     private static final int INI_ASPHYXIE = 4;
-    
+    private static final int LARGEUR_MINI = 10;
+    private static final int HAUTEUR_MINI = 10;
     private static final int INI_PIXEL = 10;
     
     /**Le panel dans le quel se deroule le jeu */
@@ -50,10 +54,14 @@ public class Controleur {
     private int hauteur= INI_HAUTEUR;
     private boolean actif;
     
+    
+    private ArrayList<patern> list_patern;
+    
     /**Constructeur par default du Controleur, il crée la vue et le modele et les initialise */
     public Controleur(){
         this.m = new Modele();
         this.aut= new auto(this);
+        this.list_patern = this.generation_patern();
         
         System.out.println(this.aut.getState());
         
@@ -65,7 +73,7 @@ public class Controleur {
             }
         }
         //tab[3][4] = true;
-        tab_mini = new boolean[10][10];
+        tab_mini = new boolean[LARGEUR_MINI][HAUTEUR_MINI];
         for(int i =0; i< 10 ; i++){
             for(int j = 0; j <10; j++){
                 tab_mini[i][j] = false;
@@ -100,6 +108,94 @@ public class Controleur {
         f.setVisible(true);
     }
     
+    
+    private ArrayList<patern> generation_patern(){
+        ArrayList<patern> a = new ArrayList<patern>();
+        boolean[][] tab = new boolean[LARGEUR_MINI][HAUTEUR_MINI];
+        patern p;
+        ArrayList<Point> list_point= new ArrayList<>();
+        
+        
+        reset_tab(tab);
+        list_point.clear();
+        //Definition des positions des cellules
+        list_point.add(new Point(0,2));
+        list_point.add(new Point(1,2));
+        list_point.add(new Point(2,2));
+        list_point.add(new Point(2,1));
+        list_point.add(new Point(1,0));
+        
+        set_tab(tab,list_point);
+        p = new patern(tab, "slider");
+        a.add(p);
+        //Reinitialisation du tab
+        tab = new boolean[LARGEUR_MINI][HAUTEUR_MINI];
+        reset_tab(tab);
+        list_point.clear();
+        
+        list_point.add(new Point(0,0));
+        list_point.add(new Point(3,0));
+        list_point.add(new Point(4,1));
+        list_point.add(new Point(0,2));
+        list_point.add(new Point(4,2));
+        list_point.add(new Point(1,3));
+        list_point.add(new Point(2,3));
+        list_point.add(new Point(3,3));
+        list_point.add(new Point(4,3));
+        set_tab(tab,list_point);
+        p = new patern(tab, "vaisseaux");
+        a.add(p);
+        //Reinitialisation du tab
+        tab = new boolean[LARGEUR_MINI][HAUTEUR_MINI];
+        reset_tab(tab);
+        list_point.clear();
+        
+        list_point.add(new Point(0,0));
+        list_point.add(new Point(1,0));
+        list_point.add(new Point(2,0));
+        list_point.add(new Point(3,0));
+        list_point.add(new Point(0,1));
+        list_point.add(new Point(3,2));
+        list_point.add(new Point(4,2));
+        list_point.add(new Point(1,3));
+        list_point.add(new Point(2,3));
+        list_point.add(new Point(4,3));
+        list_point.add(new Point(0,4));
+        list_point.add(new Point(2,4));
+        list_point.add(new Point(4,4));
+        
+        set_tab(tab,list_point);
+        p = new patern(tab, "vaisseaux");
+        a.add(p);
+        
+        return a;
+    }
+    private static void reset_tab(boolean[][] t){
+        for(int i=0; i<t.length; i++){
+            for(int j =0; j< t[0].length; j++){
+                try{
+                    t[i][j]=false;
+                }catch(ArrayIndexOutOfBoundsException e){
+                    System.err.println("ArrayIndexOutOfBoundsException reset_tab ");
+                }
+            }
+        }
+    }
+    private static void set_tab(boolean[][] t,ArrayList<Point> p){
+        Point pt;
+        Iterator<Point> it = p.iterator();
+        while(it.hasNext()){
+            pt = it.next();
+            try{
+                t[pt.x][pt.y] = true;
+            }catch(ArrayIndexOutOfBoundsException e){
+                System.err.println("ArrayIndexOutOfBoundsException set_tab : x" + pt.x +" y:" + pt.y);
+            }
+                
+            
+                    
+        }
+    }
     /**catchClick 
     * Methode qui traite les click sur un des panel
     * @param p : Le point sur lequel l'utilisateur a cliquer
