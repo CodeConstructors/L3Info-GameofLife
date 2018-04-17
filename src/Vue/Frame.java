@@ -120,7 +120,7 @@ public class Frame extends JFrame{
             this.controleur.save();
         });
            butt_charg.addActionListener((ActionEvent evt) -> {
-            this.controleur.charg();
+            this.controleur.charg(0);
         });
             butt_rand.addActionListener((ActionEvent evt) -> {
             this.controleur.random(50);
@@ -133,12 +133,12 @@ public class Frame extends JFrame{
         
         butt_Plus.addActionListener((ActionEvent evt) -> {
             
-            this.controleur.zoom(1);
+            this.controleur.zoom(1,this.panelPrincipal);
         });
         
         butt_Moins.addActionListener((ActionEvent evt) -> {
            
-            this.controleur.zoom(-1);
+            this.controleur.zoom(-1,this.panelPrincipal);
         });
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }

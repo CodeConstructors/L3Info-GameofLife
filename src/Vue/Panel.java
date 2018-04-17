@@ -251,7 +251,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener,
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
      
-           this.controleur.zoom(-e.getWheelRotation());
+           this.controleur.zoom(-e.getWheelRotation(), this);
        
     }
     
@@ -260,8 +260,11 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener,
     }
 
     public void setNombre_Pixel(int nombre_Pixel) {
-        this.nombre_Pixel = nombre_Pixel;
-        this.resize();
-        this.repaint();
+        if(nombre_Pixel> 1 && nombre_Pixel < 15){
+            this.nombre_Pixel = nombre_Pixel;
+            this.resize();
+            this.repaint();
+        }
+        
     }
 }

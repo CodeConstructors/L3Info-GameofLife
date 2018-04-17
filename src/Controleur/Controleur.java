@@ -51,10 +51,10 @@ public class Controleur {
     /**Nombre de cellules du tableau en X */
     private int largeur = INI_LARGEUR;
     /**Nombre de cellules du tableau en Y */
-    private int hauteur= INI_HAUTEUR;
+    private int hauteur = INI_HAUTEUR;
     private boolean actif;
     
-    
+    /**Liste des paterns pour le panel tampon */
     private ArrayList<patern> list_patern;
     
     /**Constructeur par default du Controleur, il crée la vue et le modele et les initialise */
@@ -108,7 +108,10 @@ public class Controleur {
         f.setVisible(true);
     }
     
-    
+    /**<b> Genration des paternes <b/>
+     * Genere une liste de patern, version actuel avec paterns dans le code
+     * @return La liste des des paterns 
+     */
     private ArrayList<patern> generation_patern(){
         ArrayList<patern> a = new ArrayList<patern>();
         boolean[][] tab = new boolean[LARGEUR_MINI][HAUTEUR_MINI];
@@ -170,6 +173,11 @@ public class Controleur {
         
         return a;
     }
+    
+    /** <b> static reset_tab </b>
+     * Initialise le tableau avec toutes les cellules à false
+     * @param t : tableau à initialiser
+     */
     private static void reset_tab(boolean[][] t){
         for(int i=0; i<t.length; i++){
             for(int j =0; j< t[0].length; j++){
@@ -181,6 +189,13 @@ public class Controleur {
             }
         }
     }
+    
+    /** <b> static set_tab <b/>
+     * Definit un tableau de boolean en se basant sur un tableau de point
+     * /!\Rajoute des points sans reinitialiser le tableau 
+     * @param t : tableau où ajouter les points
+     * @param p : ArrayList des points à definir
+     */
     private static void set_tab(boolean[][] t,ArrayList<Point> p){
         Point pt;
         Iterator<Point> it = p.iterator();
@@ -203,7 +218,7 @@ public class Controleur {
     */
     public void catchClick(Point p, Panel panel){
             //L'action sur le panel principal interagit avec le tab
-            if(panel == this.panel_principal){
+            if(panel.equals(this.panel_principal)){
                 //Le click esst sans effet quand le modele est actif
                 if(! this.actif){
                     if(p.x < this.largeur && p.y < this.hauteur){
@@ -233,32 +248,34 @@ public class Controleur {
         int onmask = MouseEvent.SHIFT_DOWN_MASK | MouseEvent.BUTTON3_DOWN_MASK;
         int x = p.x;
         int y = p.y;
-        if(! this.actif){
-            if( (mod & onmask) == onmask){//Clic droit + shift
-                //Copie dans le tableau principal le contenu du tableau secondaire
-                 for(int i = 0; i<10; i++){
-                      for(int j = 0; j<10; j++){
-                          if(p.x+i < this.largeur && p.y+j < this.hauteur){
-                              this.tab[i+x][j+y] = this.tab_mini[i][j];
-                          }                        
-                      }
-                }
-                 this.panel_principal.setTab(tab);
-
-            } else{ //Juste clic droit
-                for(int i = 0; i<10; i++){
-                    //Copie dans le tableau secondaire la zone du tableau principal
-                      for(int j = 0; j<10; j++){
-                          if(p.x+i < this.largeur && p.y+j < this.hauteur){
-                              this.tab_mini[i][j] = this.tab[i+x][j+y];
-                          }else{
-                              this.tab_mini[i][j] = false;
+        if(panel.equals(this.panel_principal)){
+            if(! this.actif){
+                if( (mod & onmask) == onmask){//Clic droit + shift
+                    //Copie dans le tableau principal le contenu du tableau secondaire
+                     for(int i = 0; i<10; i++){
+                          for(int j = 0; j<10; j++){
+                              if(p.x+i < this.largeur && p.y+j < this.hauteur){
+                                  this.tab[i+x][j+y] = this.tab_mini[i][j];
+                              }                        
                           }
+                    }
+                     this.panel_principal.setTab(tab);
 
-                      }
+                } else{ //Juste clic droit
+                    for(int i = 0; i<10; i++){
+                        //Copie dans le tableau secondaire la zone du tableau principal
+                          for(int j = 0; j<10; j++){
+                              if(p.x+i < this.largeur && p.y+j < this.hauteur){
+                                  this.tab_mini[i][j] = this.tab[i+x][j+y];
+                              }else{
+                                  this.tab_mini[i][j] = false;
+                              }
+
+                          }
+                    }
+                    this.panel_tampon.setTab(tab_mini);
+
                 }
-                this.panel_tampon.setTab(tab_mini);
-
             }
         }
         
@@ -348,15 +365,17 @@ public class Controleur {
         }
         
     }
-    
+    @Deprecated
+    /** <b>Non implementer </b> */
    public void save(){
-       fichier.save("test.txt", tab, "test");
-       
+      
    }
    private boolean[][] tab_test;
-   public void charg(){
+   public void charg(int n){
+       if(n< this.list_patern.size()){
+           this.setTabMini(this.list_patern.get(n).getTab());
+       }
        
-       this.setTab(fichier.charger("test.txt").get(0));
    }
     
     public Dimension getSize(){
@@ -395,7 +414,11 @@ public class Controleur {
         }
         
     }
-    
+    /**<b> Definition du tableau</b>
+     * Redefinit le tableau principal et ses copie dans la vue et le controleur
+     * Redefinie egalement la taille du tableau en cas de changement
+     * @param tab : tableau à copier
+     */
     private void setTab(boolean[][] tab){
        this.tab = tab;
        this.largeur = tab.length;
@@ -405,8 +428,30 @@ public class Controleur {
        
     }
     
-    public void zoom(int n){
-        this.panel_principal.setNombre_Pixel(this.panel_principal.getNombre_Pixel() + n);
+    
+     /**<b> Definition du tableau tampon </b>
+     * Copie le contenu du tableau donner dans le mini tableau
+     * Utilise un clone et pas une copie de reference pour eviter
+     * d'alterer le tableau initial (dans le contexte du programme le patern)
+     * Redefini egalement le tableau de panel_tampon
+     * @param tab : tableau à copier
+     */
+    private void setTabMini(boolean[][] tab){
+        for(int i =0; i< tab.length; i++){
+            System.arraycopy(tab[i], 0, this.tab_mini[i], 0, tab[0].length);
+            
+        }
+        this.panel_tampon.setTab(this.tab_mini);
+    }
+    
+    
+    /**<b> Zoom </b>
+     * Le zoom se contente d'augmenter le nombre de pixel du panel principal
+     * @param n : Nombre de pixel à changer
+     * @param pan : Le panel sur lequel on zoom
+     */
+    public void zoom(int n, Panel pan){
+        pan.setNombre_Pixel(pan.getNombre_Pixel() + n);
     }
     
     
