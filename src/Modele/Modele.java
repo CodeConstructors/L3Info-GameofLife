@@ -83,23 +83,23 @@ public class Modele {
        //Fonction qui redefini la taille du tableau sans perte de donnée
     //Les vérifications seront effectuer dans le controleur
     public boolean[][] resize(int larg, int haut){
-        int largeur = larg<this.largeur?larg:this.largeur;
-        int hauteur = haut<this.hauteur?haut:this.hauteur;
-        boolean tab[][] = new boolean[larg][haut];
+        int largeur_local = larg<this.largeur?larg:this.largeur;
+        int hauteur_local= haut<this.hauteur?haut:this.hauteur;
+        boolean tab_local[][] = new boolean[larg][haut];
         
         for(int i = 0;i <larg;i++){
             for(int j =0; j< haut; j++){
                 //Si l'on ai dans la limite du plus petit tableau, on copie, sinon on initialise a false
-                if(i< largeur && j< hauteur){
+                if(i< largeur_local && j< hauteur_local){
                   
-                    tab[i][j] = this.tab[i][j]; //On copie le contenu de l'ancien tableau dans le nouveau
+                    tab_local[i][j] = this.tab[i][j]; //On copie le contenu de l'ancien tableau dans le nouveau
                 }else{
-                    tab[i][j] = false;
+                    tab_local[i][j] = false;
                 }
                 
             }
         }
-        this.setTab(tab);
+        this.setTab(tab_local);
         return this.tab;
     }
 

@@ -81,7 +81,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener,
         super();
         this.setBorder(BorderFactory.createLineBorder(Color.yellow));
         this.setTab(t);
-         this.addMouseWheelListener(this);
+        this.addMouseWheelListener(this);
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
     }

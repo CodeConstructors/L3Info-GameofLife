@@ -370,7 +370,12 @@ public class Controleur {
    public void save(){
       
    }
-   private boolean[][] tab_test;
+   
+   
+   /** <b> Chargement d'un patern </b>
+    * Charge un des patern de la liste dans le mini tableau
+    * @param n : id du patern
+   */
    public void charg(int n){
        if(n< this.list_patern.size()){
            this.setTabMini(this.list_patern.get(n).getTab());
@@ -378,9 +383,7 @@ public class Controleur {
        
    }
     
-    public Dimension getSize(){
-        return new Dimension(largeur,hauteur);
-    }
+  
     /**<b> Génération des cellules aléatoires </b>
      * Crée un tableau remplit de cellule placé aléatoirement
      * La taille du tableau est basé sur celle du panel actif
@@ -397,13 +400,18 @@ public class Controleur {
                 v = Math.random()*100;
                 
                 tab[i][j] =( (v< prop || prop == 100 ) && prop != 0);
-                System.out.println(tab[i][j]);
+               
             }
         }
         System.out.println(prop);
         return tab;
     }
     
+    /** <b>Regenere aleatoirement le tableau </b>
+     * Met le jeu en pause si necessaire et remplit le 
+     * tableau de cellule
+     * @param p : Probabilité qu'une cellule soit vivante (0<p<100)
+     */
     public void random(int p){
         if(actif){
             this.playpause();
@@ -454,6 +462,11 @@ public class Controleur {
         pan.setNombre_Pixel(pan.getNombre_Pixel() + n);
     }
     
+    
+    
+      public Dimension getSize(){
+        return new Dimension(largeur,hauteur);
+    }
     
 }
 
