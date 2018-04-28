@@ -9,6 +9,7 @@ package Vue;
 import Controleur.Controleur;
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -121,6 +122,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener,
             this.longeur_cellule = this.nombre_Pixel;
             this.hauteur_cellule = this.nombre_Pixel;
             this.setSize(this.nombre_Pixel*this.largeur, this.nombre_Pixel*this.hauteur);
+            this.setPreferredSize(new Dimension(this.nombre_Pixel*this.largeur, this.nombre_Pixel*this.hauteur));
         }
         
         
@@ -253,7 +255,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener,
     public void mouseWheelMoved(MouseWheelEvent e) {
      
            this.controleur.zoom(-e.getWheelRotation(), this);
-       
+           
     }
     
       public int getNombre_Pixel() {

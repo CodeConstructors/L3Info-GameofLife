@@ -1,7 +1,6 @@
 package Controleur;
 
 
-import Controleur.Controleur;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

@@ -7,12 +7,9 @@
 package Controleur;
 
 import Modele.Modele;
-import Modele.fichier;
-import static Modele.fichier.save;
 import Modele.patern;
 import Vue.Frame;
 import Vue.Panel;
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
@@ -47,7 +44,7 @@ public class Controleur {
     /**Le tableau pour les cellules du panel principal */
     private boolean tab [][];
     /**Le tableau pour les cellules du panel secondaire */
-    private boolean tab_mini [][];
+    private final boolean tab_mini [][];
     /**Nombre de cellules du tableau en X */
     private int largeur = INI_LARGEUR;
     /**Nombre de cellules du tableau en Y */
@@ -55,7 +52,7 @@ public class Controleur {
     private boolean actif;
     
     /**Liste des paterns pour le panel tampon */
-    private ArrayList<patern> list_patern;
+    private final ArrayList<patern> list_patern;
     
     /**Constructeur par default du Controleur, il crée la vue et le modele et les initialise */
     public Controleur(){
@@ -114,12 +111,12 @@ public class Controleur {
      */
     private ArrayList<patern> generation_patern(){
         ArrayList<patern> a = new ArrayList<patern>();
-        boolean[][] tab = new boolean[LARGEUR_MINI][HAUTEUR_MINI];
+        boolean[][] tab_local = new boolean[LARGEUR_MINI][HAUTEUR_MINI];
         patern p;
         ArrayList<Point> list_point= new ArrayList<>();
         
         
-        reset_tab(tab);
+        reset_tab(tab_local);
         list_point.clear();
         //Definition des positions des cellules
         list_point.add(new Point(0,2));
@@ -128,12 +125,12 @@ public class Controleur {
         list_point.add(new Point(2,1));
         list_point.add(new Point(1,0));
         
-        set_tab(tab,list_point);
-        p = new patern(tab, "slider");
+        set_tab(tab_local,list_point);
+        p = new patern(tab_local, "slider");
         a.add(p);
         //Reinitialisation du tab
-        tab = new boolean[LARGEUR_MINI][HAUTEUR_MINI];
-        reset_tab(tab);
+        tab_local = new boolean[LARGEUR_MINI][HAUTEUR_MINI];
+        reset_tab(tab_local);
         list_point.clear();
         
         list_point.add(new Point(0,0));
@@ -145,12 +142,12 @@ public class Controleur {
         list_point.add(new Point(2,3));
         list_point.add(new Point(3,3));
         list_point.add(new Point(4,3));
-        set_tab(tab,list_point);
-        p = new patern(tab, "vaisseaux");
+        set_tab(tab_local,list_point);
+        p = new patern(tab_local, "vaisseaux");
         a.add(p);
         //Reinitialisation du tab
-        tab = new boolean[LARGEUR_MINI][HAUTEUR_MINI];
-        reset_tab(tab);
+        tab_local = new boolean[LARGEUR_MINI][HAUTEUR_MINI];
+        reset_tab(tab_local);
         list_point.clear();
         
         list_point.add(new Point(0,0));
@@ -167,8 +164,8 @@ public class Controleur {
         list_point.add(new Point(2,4));
         list_point.add(new Point(4,4));
         
-        set_tab(tab,list_point);
-        p = new patern(tab, "vaisseaux");
+        set_tab(tab_local,list_point);
+        p = new patern(tab_local, "vaisseaux");
         a.add(p);
         
         return a;
@@ -465,7 +462,7 @@ public class Controleur {
         if(n >0 || (pan.getNombre_Pixel()*pan.getHeight() > 200 && pan.getNombre_Pixel()*pan.getWidth()> 200 )){
              pan.setNombre_Pixel(pan.getNombre_Pixel() + n);
         }
-       
+      
     }
     
     

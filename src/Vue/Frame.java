@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -57,6 +58,8 @@ public class Frame extends JFrame{
     private JScrollPane scrollable = new JScrollPane();
     private Panel panelPrincipal;
     private Panel panelSecondaire;
+    
+    private JComboBox selection_patern = new JComboBox();
     public void Start(){
          this.tf_tablewidth.setValue(this.controleur.getSize().width);
          this.tf_tableheight.setValue(this.controleur.getSize().height);
@@ -168,6 +171,12 @@ public class Frame extends JFrame{
      public void redef_taille(int hauteur, int largeur){
          this.tf_tablewidth.setValue(this.controleur.getSize().width);
          this.tf_tableheight.setValue(this.controleur.getSize().height);
+     }
+     
+     public void addPatern(Object o){
+         this.selection_patern.addItem(o);
+         
+         
      }
 
 }
