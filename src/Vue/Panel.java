@@ -36,10 +36,11 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener,
     
     //Tableau des cellules
     private boolean [][] tab;
-    //Taille du tableau :
+    /**Largeur */
     private int largeur;
     private int hauteur;
     
+    /**Le controleur qui gere ce panel */
     private Controleur controleur;
     /**Definit si la grille est active ou non */
     private boolean actif = false; 
@@ -261,6 +262,10 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener,
 
     public void setNombre_Pixel(int nombre_Pixel) {
         if(nombre_Pixel> 1 && nombre_Pixel < 15){
+            Graphics2D g2 = (Graphics2D) this.getGraphics();
+            System.out.println(g2);
+           // g2.scale(2,2);
+            
             this.nombre_Pixel = nombre_Pixel;
             this.resize();
             this.repaint();

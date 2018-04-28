@@ -17,6 +17,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 
 /**
  * Frame est la vue principal sur laquelle tous les affichages sont placer
@@ -53,7 +54,7 @@ public class Frame extends JFrame{
     
     private JButton butt_Plus = new JButton("+");
     private JButton butt_Moins = new JButton("-");
-    
+    private JScrollPane scrollable = new JScrollPane();
     private Panel panelPrincipal;
     private Panel panelSecondaire;
     public void Start(){
@@ -95,7 +96,9 @@ public class Frame extends JFrame{
         
         vbox_eastPanel.add(butt_save);
         vbox_eastPanel.add(butt_charg);
-        this.add(this.panelPrincipal, BorderLayout.CENTER);
+        //this.add(this.panelPrincipal, BorderLayout.CENTER);
+       this.add(scrollable, BorderLayout.CENTER);
+       scrollable.add(panelPrincipal);
         butt_quit.setSize(25, 30);
         
         butt_quit.addActionListener((ActionEvent evt) -> {    

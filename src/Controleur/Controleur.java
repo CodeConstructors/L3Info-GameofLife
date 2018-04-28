@@ -281,6 +281,9 @@ public class Controleur {
         
     }
     
+    /**Modifie les tableaux à partir de ce que le modele
+     * calcul pour le prochain mouvement
+     */
     public void nextMove(){
         this.tab = m.nextMove();
         this.panel_principal.setTab(this.tab);
@@ -352,7 +355,7 @@ public class Controleur {
         int hau = Static.parseWithDefault(haut, -1);
         //Verification de ces valeurs, la taille maximal est pour eviter les ralentissement
         if(!this.actif){
-            if(lar > 0 && lar <200 && hau>0 && hau <200){
+            if(lar*this.panel_principal.getNombre_Pixel() > 200 && lar <200 && hau*this.panel_principal.getNombre_Pixel()>200 && hau <200){
                 this.tab = this.m.resize(lar, hau);
                 this.largeur = lar;
                 this.hauteur = hau;
@@ -459,7 +462,10 @@ public class Controleur {
      * @param pan : Le panel sur lequel on zoom
      */
     public void zoom(int n, Panel pan){
-        pan.setNombre_Pixel(pan.getNombre_Pixel() + n);
+        if(n >0 || (pan.getNombre_Pixel()*pan.getHeight() > 200 && pan.getNombre_Pixel()*pan.getWidth()> 200 )){
+             pan.setNombre_Pixel(pan.getNombre_Pixel() + n);
+        }
+       
     }
     
     
