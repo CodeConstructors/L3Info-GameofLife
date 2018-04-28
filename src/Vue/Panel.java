@@ -261,11 +261,11 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener,
       public int getNombre_Pixel() {
         return nombre_Pixel;
     }
-
+      double zoom = 1;
     public void setNombre_Pixel(int nombre_Pixel) {
         if(nombre_Pixel> 1 && nombre_Pixel < 15){
             Graphics2D g2 = (Graphics2D) this.getGraphics();
-            System.out.println(g2);
+           
            // g2.scale(2,2);
             
             this.nombre_Pixel = nombre_Pixel;

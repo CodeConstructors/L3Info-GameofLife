@@ -22,16 +22,7 @@ import java.util.Random;
  * @author jeremy
  */
 public class Controleur {
-    private static final int INI_LARGEUR = 70;
-    private static final int INI_HAUTEUR = 70;
-    
-    private static final int INI_MINVIE = 3;
-    private static final int INI_MAXVIE = 3;
-    private static final int INI_SOLITUDE = 1;
-    private static final int INI_ASPHYXIE = 4;
-    private static final int LARGEUR_MINI = 10;
-    private static final int HAUTEUR_MINI = 10;
-    private static final int INI_PIXEL = 10;
+ 
     
     /**Le panel dans le quel se deroule le jeu */
     private final Panel panel_principal;
@@ -46,9 +37,9 @@ public class Controleur {
     /**Le tableau pour les cellules du panel secondaire */
     private final boolean tab_mini [][];
     /**Nombre de cellules du tableau en X */
-    private int largeur = INI_LARGEUR;
+    private int largeur = Static.INI_LARGEUR;
     /**Nombre de cellules du tableau en Y */
-    private int hauteur = INI_HAUTEUR;
+    private int hauteur = Static.INI_HAUTEUR;
     private boolean actif;
     
     /**Liste des paterns pour le panel tampon */
@@ -58,7 +49,7 @@ public class Controleur {
     public Controleur(){
         this.m = new Modele();
         this.aut= new auto(this);
-        this.list_patern = this.generation_patern();
+        
         
         System.out.println(this.aut.getState());
         
@@ -70,7 +61,7 @@ public class Controleur {
             }
         }
         //tab[3][4] = true;
-        tab_mini = new boolean[LARGEUR_MINI][HAUTEUR_MINI];
+        tab_mini = new boolean[Static.LARGEUR_MINI][Static.HAUTEUR_MINI];
         for(int i =0; i< 10 ; i++){
             for(int j = 0; j <10; j++){
                 tab_mini[i][j] = false;
@@ -80,10 +71,10 @@ public class Controleur {
         
        
         this.m.setTab(this.tab);
-        this.m.setAsphyxie(INI_ASPHYXIE);
-        this.m.setMaxVie(INI_MAXVIE );
-        this.m.setMinVie(INI_MINVIE);
-        this.m.setSolitude(INI_SOLITUDE);
+        this.m.setAsphyxie(Static.INI_ASPHYXIE);
+        this.m.setMaxVie(Static.INI_MAXVIE );
+        this.m.setMinVie(Static.INI_MINVIE);
+        this.m.setSolitude(Static.INI_SOLITUDE);
         
         this.panel_principal = new Panel(this.tab);
         this.panel_tampon = new Panel(this.tab_mini);
@@ -92,11 +83,18 @@ public class Controleur {
         //Etablit les liens
         this.f.setLienControlleur(this);
         this.panel_principal.setLienControleur(this);
-        this.panel_principal.setNombre_Pixel(INI_PIXEL);
+        this.panel_principal.setNombre_Pixel(Static.INI_PIXEL);
         this.panel_tampon.setLienControleur(this);
         this.panel_tampon.setPreferredSize(new Dimension(100,100));
         f.setPanelPrincipal(panel_principal);
         f.setPanelSecondaire(panel_tampon);
+        
+       /* Iterator<patern> it = this.list_patern.iterator();
+        while(it.hasNext()){
+                f.addPatern(it.next());   
+        }*/
+        
+        this.list_patern = this.generation_patern();
         f.Start();
         
         //f.pack();
@@ -111,7 +109,7 @@ public class Controleur {
      */
     private ArrayList<patern> generation_patern(){
         ArrayList<patern> a = new ArrayList<patern>();
-        boolean[][] tab_local = new boolean[LARGEUR_MINI][HAUTEUR_MINI];
+        boolean[][] tab_local = new boolean[Static.LARGEUR_MINI][Static.HAUTEUR_MINI];
         patern p;
         ArrayList<Point> list_point= new ArrayList<>();
         
@@ -125,11 +123,12 @@ public class Controleur {
         list_point.add(new Point(2,1));
         list_point.add(new Point(1,0));
         
-        set_tab(tab_local,list_point);
+        this.set_tab(tab_local,list_point);
         p = new patern(tab_local, "slider");
         a.add(p);
+        f.addPatern(p);
         //Reinitialisation du tab
-        tab_local = new boolean[LARGEUR_MINI][HAUTEUR_MINI];
+        tab_local = new boolean[Static.LARGEUR_MINI][Static.HAUTEUR_MINI];
         reset_tab(tab_local);
         list_point.clear();
         
@@ -142,11 +141,12 @@ public class Controleur {
         list_point.add(new Point(2,3));
         list_point.add(new Point(3,3));
         list_point.add(new Point(4,3));
-        set_tab(tab_local,list_point);
+        this.set_tab(tab_local,list_point);
         p = new patern(tab_local, "vaisseaux");
         a.add(p);
+        f.addPatern(p);
         //Reinitialisation du tab
-        tab_local = new boolean[LARGEUR_MINI][HAUTEUR_MINI];
+        tab_local = new boolean[Static.LARGEUR_MINI][Static.HAUTEUR_MINI];
         reset_tab(tab_local);
         list_point.clear();
         
@@ -165,8 +165,9 @@ public class Controleur {
         list_point.add(new Point(4,4));
         
         set_tab(tab_local,list_point);
-        p = new patern(tab_local, "vaisseaux");
+        p = new patern(tab_local, "autre");
         a.add(p);
+        f.addPatern(p);
         
         return a;
     }
@@ -376,9 +377,9 @@ public class Controleur {
     * Charge un des patern de la liste dans le mini tableau
     * @param n : id du patern
    */
-   public void charg(int n){
-       if(n< this.list_patern.size()){
-           this.setTabMini(this.list_patern.get(n).getTab());
+   public void charg(Object o){
+       if(o instanceof patern){
+           this.setTabMini(((patern) o).getTab());
        }
        
    }
@@ -470,6 +471,42 @@ public class Controleur {
       public Dimension getSize(){
         return new Dimension(largeur,hauteur);
     }
+      
+      public boolean setAsphyxie(int n){
+          if(n<9 && n>= 0){
+              this.m.setAsphyxie(n);
+              return true;
+          }else{
+              return false;
+          }
+      }
+      
+      public boolean setSolitude(int n){
+          if(n<9 && n>= 0){
+              this.m.setSolitude(n);
+              return true;
+          }else{
+              return false;
+          }
+      }
+      
+      public boolean setVieMin(int n){
+          if(n<9 && n>= 0){
+              this.m.setMinVie(n);
+              return true;
+          }else{
+              return false;
+          }
+      }
+      
+      public boolean setVieMax(int n){
+          if(n<9 && n>= 0){
+              this.m.setMaxVie(n);
+              return true;
+          }else{
+              return false;
+          }
+      }
     
 }
 

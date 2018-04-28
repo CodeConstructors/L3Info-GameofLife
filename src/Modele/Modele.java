@@ -80,8 +80,10 @@ public class Modele {
         return tab;
     }
     
-       //Fonction qui redefini la taille du tableau sans perte de donnée
-    //Les vérifications seront effectuer dans le controleur
+     /**<b> Redefinition de la taille du tableau </b>
+      * Fonction qui redefini la taille du tableau sans perte de donnée
+      *Les vérifications seront effectuer dans le controleur 
+      */
     public boolean[][] resize(int larg, int haut){
         int largeur_local = larg<this.largeur?larg:this.largeur;
         int hauteur_local= haut<this.hauteur?haut:this.hauteur;
@@ -102,7 +104,7 @@ public class Modele {
         this.setTab(tab_local);
         return this.tab;
     }
-
+    
     public void setTab(boolean[][] tab) {
         this.tab = tab;
         this.largeur = tab.length;
