@@ -7,10 +7,9 @@ import Controleur.Controleur;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
- * @author olomorn
+ * @author Jérémy Rousseau & Benoît Gougeon
  */
 public class main {
 
@@ -18,8 +17,7 @@ public class main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.out.println("control main_main_21");
         Controleur c = new Controleur();
     }
-    
+
 }
