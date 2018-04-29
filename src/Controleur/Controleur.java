@@ -390,7 +390,7 @@ public class Controleur {
      * <b> Chargement d'un patern </b>
      * Charge un des patern de la liste dans le mini tableau
      *
-     * @param n : id du patern
+     * @param o : patern à charger
      */
     public void charg(Object o) {
         if (o instanceof patern) {

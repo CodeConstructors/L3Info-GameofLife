@@ -8,10 +8,20 @@ class auto extends Thread {
     private Controleur controleur;
     private boolean paused = true;
     private final Object lock = new Object();
-
+    /**<b> run </b>
+     * Effectue la boucle de jeu. Appelle nextMove et attend 
+     * pour une durée predefinie dans les parametres
+     */
     public void run() {
         paused = false;
         while (true) {
+            
+            //Je ne suis pas certain du fonctionnement du lock mais : 
+            /* Le thread suit l'objet lock, ils sont synchroniser
+            La fonction lock.wait() est bloquante et attend que lock.notifyAll()
+            soit appeller par un autre thread (ici le thread principal ) 
+            Cela permet de mettre en pause le thread sans l'interompre
+            */
             synchronized (lock) {
                 if (paused) {
                     try {
@@ -22,9 +32,9 @@ class auto extends Thread {
                 } else {
                     try {
                         this.controleur.nextMove();
-                        Thread.sleep(300);
+                        Thread.sleep(Static.TEMPS_PAUSE);
                     } catch (InterruptedException ex) {
-                        System.out.println("catch play");
+                        System.err.println("auto.java: run() thread.sleep");
                         Logger.getLogger(auto.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }

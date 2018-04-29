@@ -161,9 +161,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener,
             controleur.catchClick(new Point(x, y), this);
         } else if (e.getButton() == MouseEvent.BUTTON3) {
             controleur.catchClickDroit(new Point(x, y), this, e.getModifiersEx());
-
         }
-
     }
 
     @Override
@@ -248,7 +246,6 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener,
             int y = e.getY() / (int) hauteur_cellule;
             mousePos = new Point(x, y);
             repaint();
-            // System.out.println(e.getPoint());
         }
 
     }

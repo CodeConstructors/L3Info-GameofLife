@@ -20,6 +20,7 @@ public abstract class Static {
     public static final int LARGEUR_MINI = 10;
     public static final int HAUTEUR_MINI = 10;
     public static final int INI_PIXEL = 10;
+    public static final int TEMPS_PAUSE = 300;
 
     //Integer.parseInt avec valeur par default en cas d'erreur
     static public int parseWithDefault(String s, int def) {
