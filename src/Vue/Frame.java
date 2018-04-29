@@ -268,8 +268,10 @@ public class Frame extends JFrame{
         asphyxie.addChangeListener((javax.swing.event.ChangeEvent evt)-> {
                 JSpinner s = (JSpinner) evt.getSource();
                 if(! this.controleur.setAsphyxie(Integer.valueOf(s.getValue().toString()))){
-                  s.setValue(s.getPreviousValue());
+                    s.setValue(s.getPreviousValue());
                 }
+                
+                
                 //System.out.println("test");
                         
             
@@ -327,5 +329,12 @@ public class Frame extends JFrame{
          this.selection_patern.addItem(o);
          
          
+     }
+     
+     public void setParametreJeu(int asphyxie,int solitude,int vieMin, int vieMax){
+         this.asphyxie.setValue(asphyxie);
+         this.solitude.setValue(solitude);
+         this.vieMin.setValue(vieMin);
+         this.vieMax.setValue(vieMax);
      }
 }

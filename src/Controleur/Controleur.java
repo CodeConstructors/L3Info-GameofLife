@@ -88,6 +88,7 @@ public class Controleur {
         this.panel_tampon.setPreferredSize(new Dimension(100,100));
         f.setPanelPrincipal(panel_principal);
         f.setPanelSecondaire(panel_tampon);
+        this.f.setParametreJeu(Static.INI_ASPHYXIE, Static.INI_SOLITUDE, Static.INI_MINVIE, Static.INI_MAXVIE);
         
        /* Iterator<patern> it = this.list_patern.iterator();
         while(it.hasNext()){
@@ -466,9 +467,7 @@ public class Controleur {
       
     }
     
-    
-    
-      public Dimension getSize(){
+    public Dimension getSize(){
         return new Dimension(largeur,hauteur);
     }
       
